@@ -6,12 +6,19 @@ USER root
 # Set the working directory in the container
 WORKDIR /app
 
+# Install system dependencies and build dependencies
+RUN apt-get update && apt-get install -y \
+    tar gzip xz-utils\
+    libgl1-mesa-glx libglib2.0-0 \
+    libsm6 libxext6 libxrender-dev \
+    gcc g++ && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Clone your Git repository and copy necessary files to /app
-RUN git clone https://github.com/ctf05/Inferless.git /tmp/repo && \
-    cp /tmp/repo/inference.py /app/ && \
-    cp /tmp/repo/symlink_patch.py /app/ && \
-    cp /tmp/repo/requirements.txt /app/ && \
-    rm -rf /tmp/repo
+RUN cp ./main.py /app/main.py && \
+    cp ./symlink_patch.py /app/symlink_patch.py && \
+    cp ./requirements.txt /app/requirements.txt
 
 # Create site-packages directory
 RUN mkdir -p /app/site-packages
