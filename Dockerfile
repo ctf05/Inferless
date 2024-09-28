@@ -52,7 +52,8 @@ RUN find /app -type d -name '__pycache__' -exec rm -rf {} + && \
     find /app -type d -name 'tests' -exec rm -rf {} +
 
 # Install FastAPI and Uvicorn
-RUN pip install fastapi uvicorn
+RUN pip install fastapi uvicorn && \
+    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
 
 # Copy the FastAPI app
 COPY main.py /app/main.py
