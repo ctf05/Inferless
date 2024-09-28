@@ -62,7 +62,7 @@ EXPOSE 8080
 
 # Define an environment variable
 # This variable will be used by Uvicorn as the binding address
-ENV HOST 0.0.0.0
+ENV HOST=0.0.0.0
 
 # Set the entrypoint to run the FastAPI app
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
