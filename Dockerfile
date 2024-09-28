@@ -1,4 +1,4 @@
-FROM python:3.10.13 AS builder
+FROM python:3.12
 
 # Switch to root user for installations
 USER root
@@ -16,9 +16,9 @@ RUN apt-get update && apt-get install -y \
     rm -rf /var/lib/apt/lists/*
 
 # Clone your Git repository and copy necessary files to /app
-RUN cp ./main.py /app/main.py && \
-    cp ./symlink_patch.py /app/symlink_patch.py && \
-    cp ./requirements.txt /app/requirements.txt
+COPY ./main.py /app/main.py
+COPY ./symlink_patch.py /app/symlink_patch.py
+COPY ./requirements.txt /app/requirements.txt
 
 # Create site-packages directory
 RUN mkdir -p /app/site-packages
