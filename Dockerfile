@@ -1,4 +1,4 @@
-FROM python:3.12-slim AS builder
+FROM python:3.10.13 AS builder
 
 # Switch to root user for installations
 USER root
@@ -62,5 +62,9 @@ COPY main.py /app/main.py
 # Expose port 8080
 EXPOSE 8080
 
+# Define an environment variable
+# This variable will be used by Uvicorn as the binding address
+ENV HOST 0.0.0.0
+
 # Set the entrypoint to run the FastAPI app
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
