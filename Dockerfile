@@ -25,14 +25,6 @@ RUN git clone https://github.com/ctf05/Inferless.git /tmp/repo && \
 # Create site-packages directory
 RUN mkdir -p /app/site-packages
 
-# Install Python dependencies in /app
-RUN python -m pip install --upgrade pip && \
-    python -m pip install \
-    --no-cache-dir \
-    --target=/app/site-packages \
-    --upgrade \
-    -r /app/requirements.txt
-
 # Download and install FFmpeg in /app
 RUN wget https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz && \
     tar xJf ffmpeg-master-latest-linux64-gpl.tar.xz && \
