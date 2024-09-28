@@ -42,7 +42,7 @@ RUN wget https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-m
 ENV PATH="/app:/usr/local/bin:${PATH}"
 
 # Copy contents of /usr to /app/usr
-RUN mkdir -p /app/usr && \
+RUN mkdir -p /app/usr/lib64 && \
     cp -r /usr/lib64/* /app/usr/lib64/
 
 # Remove unnecessary files
