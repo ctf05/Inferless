@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
     rm -rf /var/lib/apt/lists/*
 
 # Clone your Git repository and copy necessary files to /app
-RUN git clone https://github.com/ctf05/DepthFlow-Lambda-Docker.git /tmp/repo && \
+RUN git clone https://github.com/ctf05/Inferless.git /tmp/repo && \
     cp /tmp/repo/inference.py /app/ && \
     cp /tmp/repo/symlink_patch.py /app/ && \
     cp /tmp/repo/requirements.txt /app/ && \
