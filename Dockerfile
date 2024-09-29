@@ -23,16 +23,16 @@ COPY ./requirements.txt /app/requirements.txt
 RUN mkdir -p /app/site-packages
 
 # Install Python dependencies in /app
-RUN python -m pip install --upgrade pip && \
-    python -m pip install \
+RUN pip install --upgrade pip && \
+    pip install \
     --target=/app/site-packages \
     --upgrade \
     -r /app/requirements.txt && \
-    python -m pip install \
-    --target=/app/site-packages  \
+    pip install \
     --upgrade \
     torch==2.4.1  \
-    --index-url https://download.pytorch.org/whl/cu121
+    --index-url https://download.pytorch.org/whl/cu121 && \
+    pip install fastapi uvicorn
 
 # Download and install FFmpeg in /app
 RUN wget https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz && \
@@ -58,15 +58,12 @@ ENV NVIDIA_DRIVER_CAPABILITIES="all" \
     NVIDIA_VISIBLE_DEVICES="all" \
     WINDOW_BACKEND="headless" \
     WORKSPACE='/tmp' \
+    HOST=0.0.0.0 \
     PATH="/app:/app/site-packages:/usr/local/bin:${PATH}" \
-    PYTHONPATH="/app/site-packages:${PYTHONPATH}"
+    PYTHONPATH="/app/site-packages"
 
 # Expose port 8080
 EXPOSE 8080
 
-# Define an environment variable
-# This variable will be used by Uvicorn as the binding address
-ENV HOST=0.0.0.0
-
 # Set the entrypoint to run the FastAPI app
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
+CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
