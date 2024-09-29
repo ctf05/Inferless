@@ -1,18 +1,5 @@
 import os
-
-# Set environment variables
-os.environ['WORKSPACE'] = '/tmp'
-os.environ['WINDOW_BACKEND'] = 'headless'
-
-ffmpeg_dir = '/app:/usr/local/bin'  # Adjusted for Inferless
-os.environ['PATH'] = f"{ffmpeg_dir}:{os.environ.get('PATH', '')}"
-site_packages_dir = '/app/site-packages'
-os.environ['PATH'] = f"{site_packages_dir}:{os.environ.get('PATH', '')}"
-
 import sys
-
-os.environ['PYTHONPATH'] = f"{site_packages_dir}:{os.environ.get('PYTHONPATH', '')}"
-sys.path.append(site_packages_dir)
 
 # Apply symlink patch
 import symlink_patch

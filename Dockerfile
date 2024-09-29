@@ -1,5 +1,4 @@
-FROM pytorch/pytorch:2.4.1-cuda12.4-cudnn9-runtime
-
+FROM python:3.12
 # Switch to root user for installations
 USER root
 
@@ -37,9 +36,6 @@ RUN wget https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-m
     mv ffmpeg-master-latest-linux64-gpl/bin/ffprobe /app/ffprobe && \
     rm -rf ffmpeg-master-latest-linux64-gpl*
 
-# Ensure FFmpeg is in the PATH
-ENV PATH="/app:/app/site-packages:/usr/local/bin:${PATH}"
-
 # Copy contents of /usr to /app/usr
 RUN mkdir -p /app/usr/lib64 && \
     cp -r /usr/lib64/* /app/usr/lib64/
@@ -50,11 +46,15 @@ RUN find /app -type d -name '__pycache__' -exec rm -rf {} + && \
     find /app -type f -name '*.pyo' -delete && \
     find /app -type d -name 'tests' -exec rm -rf {} +
 
-# Install FastAPI and Uvicorn
-RUN pip install --target=/app/site-packages fastapi uvicorn
-
 # Copy the FastAPI app
 COPY main.py /app/main.py
+
+ENV NVIDIA_DRIVER_CAPABILITIES="all" \
+    NVIDIA_VISIBLE_DEVICES="all" \
+    WINDOW_BACKEND="headless" \
+    WORKSPACE='/tmp' \
+    PATH="/app:/app/site-packages:/usr/local/bin:${PATH}" \
+    PYTHONPATH="/app/site-packages:${PYTHONPATH}"
 
 # Expose port 8080
 EXPOSE 8080
