@@ -26,7 +26,6 @@ RUN mkdir -p /app/site-packages
 # Install Python dependencies in /app
 RUN python -m pip install --upgrade pip && \
     python -m pip install \
-    --no-cache-dir \
     --target=/app/site-packages \
     --upgrade \
     -r /app/requirements.txt
