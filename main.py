@@ -14,10 +14,10 @@ from pydantic import BaseModel
 
 FPS = 30
 DURATION = 6
-WIDTH = 1024
-HEIGHT = 576
-SSAA = 2
-QUALITY = 1000
+WIDTH = 1152
+HEIGHT = 648
+SSAA = 3
+QUALITY = 100
 
 class CustomScene(DepthScene):
     def setup(self):
@@ -49,7 +49,7 @@ def process_scene(image_bytes, depth_bytes):
     model = CustomScene(backend='headless')
     model.input(image=image_bytes, depth=depth_bytes)
     output_path = "/tmp/output.mp4"
-    model.main(vcodec="h264-nvenc", output=output_path, fps=FPS, time=DURATION, ssaa=SSAA, quality=QUALITY, height=HEIGHT, width=WIDTH)
+    model.main(output=output_path, fps=FPS, time=DURATION, ssaa=SSAA, quality=QUALITY, height=HEIGHT, width=WIDTH)
     return output_path
 
 @app.get("/v2")
