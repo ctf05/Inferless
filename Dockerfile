@@ -8,7 +8,7 @@ WORKDIR /app
 
 # Install system dependencies and build dependencies
 RUN apt-get update && apt-get install -y \
-    tar gzip xz-utils\
+    tar gzip xz-utils wget\
     libgl1-mesa-glx libglib2.0-0 \
     libsm6 libxext6 libxrender-dev \
     gcc g++ && \
@@ -62,9 +62,6 @@ EXPOSE 8080
 # Define an environment variable
 # This variable will be used by Uvicorn as the binding address
 ENV HOST=0.0.0.0
-
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:8080/v2/health/live || exit 1
 
 # Set the entrypoint to run the FastAPI app
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
