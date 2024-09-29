@@ -10,7 +10,8 @@ RUN apt-get update && apt-get install -y \
     tar gzip xz-utils wget\
     libgl1-mesa-glx libglib2.0-0 \
     libsm6 libxext6 libxrender-dev \
-    gcc g++ && \
+    gcc g++ \
+    libegl1-mesa libegl1-mesa-dev libgles2-mesa-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -60,7 +61,8 @@ ENV NVIDIA_DRIVER_CAPABILITIES="all" \
     WORKSPACE='/tmp' \
     HOST=0.0.0.0 \
     PATH="/app:/app/site-packages:/usr/local/bin:${PATH}" \
-    PYTHONPATH="/app/site-packages"
+    PYTHONPATH="/app/site-packages" \
+    LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
 
 # Expose port 8080
 EXPOSE 8080
