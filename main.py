@@ -42,8 +42,8 @@ def process_scene(image_bytes, depth_bytes):
     model = CustomScene(backend='headless')
     model.input(image=image_bytes, depth=depth_bytes)
     output_path = "/tmp/output.mp4"
-    bench = model.main(benchmark=True, time=60)
     model.main(output=output_path, fps=30, time=6, ssaa=2, quality=1000, height=1024, width=576)
+    bench = model.main(benchmark=True, time=60)
     return output_path, bench
 
 @app.get("/v2")
