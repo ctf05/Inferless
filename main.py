@@ -12,6 +12,13 @@ from DepthFlow.Motion import Components, Presets, Target
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
+FPS = 30
+DURATION = 6
+WIDTH = 1024
+HEIGHT = 576
+SSAA = 2
+QUALITY = 1000
+
 class CustomScene(DepthScene):
     def setup(self):
         super().setup()
@@ -42,9 +49,8 @@ def process_scene(image_bytes, depth_bytes):
     model = CustomScene(backend='headless')
     model.input(image=image_bytes, depth=depth_bytes)
     output_path = "/tmp/output.mp4"
-    model.main(output=output_path, fps=30, time=6, ssaa=2, quality=1000, height=1024, width=576)
-    bench = model.main(benchmark=True, time=60)
-    return output_path, bench
+    model.main(output=output_path, fps=FPS, time=DURATION, ssaa=SSAA, quality=QUALITY, height=HEIGHT, width=WIDTH)
+    return output_path
 
 @app.get("/v2")
 @app.get("/v2/models/motion-forge")
@@ -63,7 +69,7 @@ def infer(request: InferRequest):
         image_bytes = base64.b64decode(request.image)
         depth_bytes = base64.b64decode(request.depth)
 
-        output_path, bench = process_scene(image_bytes, depth_bytes)
+        output_path = process_scene(image_bytes, depth_bytes)
 
         # Read the output video file
         with open(output_path, "rb") as video_file:
@@ -78,11 +84,12 @@ def infer(request: InferRequest):
         return {
             "message": "Processing complete",
             "video": video_base64,
-            "bench": bench,
-            "fps": 12,
-            "duration": 5,
-            "width": 360,
-            "height": 640
+            "fps": FPS,
+            "duration": DURATION,
+            "width": WIDTH,
+            "height": HEIGHT,
+            "ssaa": SSAA,
+            "quality": QUALITY
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
