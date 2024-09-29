@@ -27,7 +27,12 @@ RUN python -m pip install --upgrade pip && \
     python -m pip install \
     --target=/app/site-packages \
     --upgrade \
-    -r /app/requirements.txt
+    -r /app/requirements.txt && \
+    python -m pip install \
+    --target=/app/site-packages  \
+    --upgrade \
+    torch==2.4.1  \
+    --index-url https://download.pytorch.org/whl/cu121
 
 # Download and install FFmpeg in /app
 RUN wget https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz && \
