@@ -62,7 +62,7 @@ ENV NVIDIA_DRIVER_CAPABILITIES="all" \
     HOST=0.0.0.0 \
     PATH="/app:/app/site-packages:/usr/local/bin:${PATH}" \
     PYTHONPATH="/app/site-packages" \
-    LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
+    LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu"
 
 # Expose port 8080
 EXPOSE 8080
