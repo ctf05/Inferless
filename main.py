@@ -1,10 +1,8 @@
 import os
-import sys
 
 # Apply symlink patch
 import symlink_patch
 
-import json
 import base64
 from DepthFlow import DepthScene
 from ShaderFlow.Message import ShaderMessage
@@ -39,9 +37,9 @@ class InferRequest(BaseModel):
     depth: str
 
 app = FastAPI()
-model = CustomScene(backend='headless')
 
 def process_scene(image_bytes, depth_bytes):
+    model = CustomScene(backend='headless')
     model.input(image=image_bytes, depth=depth_bytes)
     output_path = "/tmp/output.mp4"
     model.main(output=output_path, fps=12, time=5, ssaa=1, quality=0, height=640, width=360)
