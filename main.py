@@ -16,7 +16,7 @@ FPS = 30
 DURATION = 6
 WIDTH = 1152
 HEIGHT = 648
-SSAA = 3
+SSAA = 2
 QUALITY = 100
 
 class CustomScene(DepthScene):
