@@ -42,9 +42,9 @@ def process_scene(image_bytes, depth_bytes):
     model = CustomScene(backend='headless')
     model.input(image=image_bytes, depth=depth_bytes)
     output_path = "/tmp/output.mp4"
-    model.main(benchmark=True, time=60)
-    #model.main(output=output_path, fps=12, time=5, ssaa=1, quality=0, height=640, width=360)
-    return output_path
+    bench = model.main(benchmark=True, time=60)
+    model.main(output=output_path, fps=30, time=6, ssaa=2, quality=1000, height=1024, width=576)
+    return output_path, bench
 
 @app.get("/v2")
 @app.get("/v2/models/motion-forge")
@@ -63,7 +63,7 @@ def infer(request: InferRequest):
         image_bytes = base64.b64decode(request.image)
         depth_bytes = base64.b64decode(request.depth)
 
-        output_path = process_scene(image_bytes, depth_bytes)
+        output_path, bench = process_scene(image_bytes, depth_bytes)
 
         # Read the output video file
         with open(output_path, "rb") as video_file:
@@ -78,6 +78,7 @@ def infer(request: InferRequest):
         return {
             "message": "Processing complete",
             "video": video_base64,
+            "bench": bench,
             "fps": 12,
             "duration": 5,
             "width": 360,
