@@ -1,4 +1,4 @@
-FROM python:3.12
+FROM nvidia/opengl:1.2-glvnd-runtime-ubuntu22.04
 # Switch to root user for installations
 USER root
 
@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     tar gzip xz-utils wget\
     libgl1-mesa-glx libglib2.0-0 \
     libsm6 libxext6 libxrender-dev \
-    gcc g++ \
+    gcc g++ mesa-utils xvfb \
     libegl1-mesa libegl1-mesa-dev libgles2-mesa-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
