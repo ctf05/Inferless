@@ -49,7 +49,7 @@ def process_scene(image_bytes, depth_bytes):
     model = CustomScene(backend='headless')
     model.input(image=image_bytes, depth=depth_bytes)
     output_path = "/tmp/output.mp4"
-    model.main(output=output_path, fps=FPS, time=DURATION, ssaa=SSAA, quality=QUALITY, height=HEIGHT, width=WIDTH)
+    model.main(vcodec="h264-nvenc", output=output_path, fps=FPS, time=DURATION, ssaa=SSAA, quality=QUALITY, height=HEIGHT, width=WIDTH)
     return output_path
 
 @app.get("/v2")
