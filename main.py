@@ -46,17 +46,17 @@ def process_scene(image_bytes, depth_bytes):
     return output_path
 
 @app.get("/v2")
-@app.get("/v2/models/depth-flow-model")
+@app.get("/v2/models/motion-forge")
 def version():
-    return {"name": "depth-flow-model"}
+    return {"name": "motion-forge"}
 
 @app.get("/v2/health/live")
 @app.get("/v2/health/ready")
-@app.get("/v2/models/depth-flow-model/ready")
+@app.get("/v2/models/motion-forge/ready")
 def health():
     return {"status": "running"}
 
-@app.post("/v2/models/depth-flow-model/infer")
+@app.post("/v2/models/motion-forge/infer")
 def infer(request: InferRequest):
     try:
         image_bytes = base64.b64decode(request.image)
