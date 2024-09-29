@@ -1,4 +1,4 @@
-FROM python:3.12
+FROM pytorch/pytorch:2.4.1-cuda12.4-cudnn9-runtime
 
 # Switch to root user for installations
 USER root
@@ -39,7 +39,7 @@ RUN wget https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-m
     rm -rf ffmpeg-master-latest-linux64-gpl*
 
 # Ensure FFmpeg is in the PATH
-ENV PATH="/app:/usr/local/bin:${PATH}"
+ENV PATH="/app:/app/site-packages:/usr/local/bin:${PATH}"
 
 # Copy contents of /usr to /app/usr
 RUN mkdir -p /app/usr/lib64 && \
@@ -52,8 +52,7 @@ RUN find /app -type d -name '__pycache__' -exec rm -rf {} + && \
     find /app -type d -name 'tests' -exec rm -rf {} +
 
 # Install FastAPI and Uvicorn
-RUN pip install --target=/app/site-packages fastapi uvicorn && \
-    pip install --target=/app/site-packages torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+RUN pip install --target=/app/site-packages fastapi uvicorn
 
 # Copy the FastAPI app
 COPY main.py /app/main.py
@@ -64,6 +63,9 @@ EXPOSE 8080
 # Define an environment variable
 # This variable will be used by Uvicorn as the binding address
 ENV HOST=0.0.0.0
+
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:8080/v2/health/live || exit 1
 
 # Set the entrypoint to run the FastAPI app
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
